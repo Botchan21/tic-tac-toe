@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <title>Tic Tac Toe</title>
+</head>
+
+<body>
+    <div class="columns is-vcentered is-centered" style="height: 100vh;">
+        <div class="box is-size-5 has-background-white-bis">
+            <div class="parent column">
+                <div class="cell">
+                    <input class="b" type="button" onclick="Click(0)"></input>
+                    <input class="b" type="button" onclick="Click(1)"></input>
+                    <input class="b" type="button" onclick="Click(2)"></input>
+                </div>
+                <div class="cell">
+                    <input class="b" type="button" onclick="Click(3)"></input>
+                    <input class="b" type="button" onclick="Click(4)"></input>
+                    <input class="b" type="button" onclick="Click(5)"></input>
+                </div>
+                <div class="cell">
+                    <input class="b" type="button" onclick="Click(6)"></input>
+                    <input class="b" type="button" onclick="Click(7)"></input>
+                    <input class="b" type="button" onclick="Click(8)"></input>
+                </div>
+            </div>
+            <p id="result" class="pl-5 is-size-1" style="font-weight: bold;"></p>
+        </div>
+    </div>
+</body>
+
+<script>
+    let cell = ['', '', '', '', '', '', '', '', ''];
+    let order = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    let mark = '○';
+    let color = '#c2ecff';
+    let turn = 1;
+    let game = true;
+
+    function Click(num) {
+        if (game && cell[num] === '') {
+            cell[num] = mark;
+            order[num] = turn;
+            document.getElementsByClassName('b')[num].value = mark;
+            document.getElementsByClassName('b')[num].style.backgroundColor = color;
+            document.getElementsByClassName('b')[num].style.color = "#000";
+            color = color === '#ffc2c2' ? '#c2ecff' : '#ffc2c2';
+            if (order.includes(turn - 6)) {
+                cell[order.indexOf(turn - 6)] = '';
+                document.getElementsByClassName('b')[order.indexOf(turn - 6)].value = '';
+                document.getElementsByClassName('b')[order.indexOf(turn - 6)].style.backgroundColor = '#f9fafb';
+                order[order.indexOf(turn - 6)] = 0;
+            }
+            if (Check()) {
+                document.getElementById("result").textContent = `${mark}wins`
+                game = false;
+            }
+            if (turn > 5 && order.includes(turn - 5)) {
+                document.getElementsByClassName('b')[order.indexOf(turn - 5)].style.color = '#bebebe';
+            }
+            turn++;
+            mark = mark === '✕' ? '○' : '✕';
+        }
+    }
+
+    function Check() {
+        const combos = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        return combos.some(combo => combo.every(num => cell[num] === mark));
+    }
+</script>
+
+<style>
+    .parent {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .cell {
+        display: grid;
+        grid-template-columns: repeat(1vh, 20vh);
+    }
+
+    .b {
+        background-color: #f9fafb;
+        height: 12vh;
+        width: 12vh;
+        margin: 1vh;
+        font-weight: bold;
+        font-size: 5vh;
+    }
+</style>
+
+</html>
